@@ -2,39 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nova Courses - Power Automate Desktop Tutorial</title>
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1HIcFZ72E6K7PqPP4UmYd1zq+UstOgF6N9KI65qnm" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; }
+    body {
+      font-family: Arial, sans-serif;
+      scroll-behavior: smooth;
+    }
     .sidebar {
       width: 250px;
-      height: 100vh;
       position: fixed;
       top: 0;
+      bottom: 0;
       left: 0;
       padding-top: 56px;
-      background-color: #f8f9fa;
-      border-right: 1px solid #ddd;
+      background-color: #ffffff;
+      border-right: 1px solid #e0e0e0;
+      transition: transform 0.3s ease;
     }
-    .sidebar .nav-link {
-      color: #333;
-    }
-    .sidebar .nav-link.active {
-      background-color: #e9ecef;
-      font-weight: 600;
+    .sidebar.collapsed {
+      transform: translateX(-250px);
     }
     #content {
       margin-left: 250px;
       padding: 70px 20px 20px;
+      transition: margin-left 0.3s ease;
     }
-    img { max-width: 100%; height: auto; margin: 15px 0; }
-    code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
-    pre { background: #f4f4f4; padding: 10px; border-radius: 3px; overflow-x: auto; }
-    /* Floating chat button */
+    #content.expanded {
+      margin-left: 0;
+    }
+    .sidebar .nav-link {
+      color: #495057;
+      padding: 0.75rem 1.25rem;
+      transition: background-color 0.2s;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #f1f3f5;
+    }
+    .sidebar .nav-link.active {
+      background-color: #e9ecef;
+      font-weight: 600;
+      border-left: 4px solid #0d6efd;
+      color: #0d6efd;
+    }
+    .accordion-button {
+      padding: 0.75rem 1.25rem;
+    }
+    video {
+      width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    .gallery img {
+      border-radius: 4px;
+      transition: transform 0.3s;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
     #chatBtn {
       position: fixed;
       bottom: 20px;
@@ -42,175 +71,179 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      z-index: 1050;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
     }
-    /* Chat window */
+    #chatBtn:hover {
+      transform: scale(1.1);
+    }
     #chatWindow {
       position: fixed;
       bottom: 90px;
       right: 20px;
-      width: 300px;
-      max-height: 400px;
+      width: 320px;
+      max-height: 420px;
       display: none;
-      z-index: 1050;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   </style>
 </head>
-<body>
+<body data-bs-spy="scroll" data-bs-target="#sidebarNav" data-bs-offset="70" tabindex="0">
   <!-- Top Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+  <nav class="navbar navbar-light bg-white fixed-top shadow-sm">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nova Courses</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <button class="btn btn-outline-secondary me-2 d-lg-none" id="toggleSidebar">
+        <i class="bi bi-list"></i>
       </button>
-      <div class="collapse navbar-collapse" id="topNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#install">Install</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#register">Register Machine</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#monitor">Analytics</a>
-          </li>
-        </ul>
-      </div>
+      <a class="navbar-brand fw-bold" href="#home">Nova Courses</a>
+      <div class="d-none d-lg-block"></div>
     </div>
   </nav>
 
   <!-- Sidebar Navigation -->
-  <div class="sidebar">
-    <nav class="nav flex-column">
-      <a class="nav-link active" href="#home"><i class="bi bi-book"></i> Course Overview</a>
-      <a class="nav-link" href="#install"><i class="bi bi-download"></i> Install PAD</a>
-      <a class="nav-link" href="#runtime"><i class="bi bi-plug"></i> Setup Runtime</a>
-      <a class="nav-link" href="#register"><i class="bi bi-hdd-network"></i> Register Machine</a>
-      <a class="nav-link" href="#groups"><i class="bi bi-people"></i> Machine Groups</a>
-      <a class="nav-link" href="#flows"><i class="bi bi-ui-checks"></i> Create Flows</a>
-      <a class="nav-link" href="#monitor"><i class="bi bi-bar-chart"></i> Monitor Activity</a>
-      <a class="nav-link" href="#powerbi"><i class="bi bi-biotech"></i> Power BI Insights</a>
-    </nav>
-  </div>
+  <nav id="sidebarNav" class="sidebar bg-light">
+    <div class="accordion" id="courseAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            Course Modules
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#courseAccordion">
+          <div class="accordion-body p-0">
+            <nav class="nav flex-column">
+              <a class="nav-link active" href="#home"><i class="bi bi-book me-1"></i>Overview</a>
+              <a class="nav-link" href="#install"><i class="bi bi-download me-1"></i>Install PAD</a>
+              <a class="nav-link" href="#runtime"><i class="bi bi-plug me-1"></i>Setup Runtime</a>
+              <a class="nav-link" href="#register"><i class="bi bi-hdd-network me-1"></i>Register Machine</a>
+              <a class="nav-link" href="#groups"><i class="bi bi-people me-1"></i>Machine Groups</a>
+              <a class="nav-link" href="#flows"><i class="bi bi-ui-checks me-1"></i>Create Flows</a>
+              <a class="nav-link" href="#monitor"><i class="bi bi-bar-chart me-1"></i>Monitor Activity</a>
+              <a class="nav-link" href="#powerbi"><i class="bi bi-pie-chart me-1"></i>Power BI Insights</a>
+              <a class="nav-link" href="#video"><i class="bi bi-play-circle me-1"></i>Video Tutorial</a>
+              <a class="nav-link" href="#gallery"><i class="bi bi-images me-1"></i>Image Gallery</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <!-- Main Content -->
-  <div id="content">
-    <h1 id="home">How to Configure Power Automate Desktop for RPA &amp; Monitor Analytics</h1>
-    <p><em>By [Your Name], [Date]</em></p>
+  <main id="content">
+    <section id="home" class="mb-5">
+      <h1>How to Configure Power Automate Desktop for RPA &amp; Monitor Analytics</h1>
+      <p class="text-muted"><em>By [Your Name], [Date]</em></p>
+    </section>
 
-    <h2>Introduction</h2>
-    <p>Power Automate Desktop brings low-code robotic process automation (RPA) to your Windows machines and lets you orchestrate, schedule, and monitor your desktop flows from the cloud. In this tutorial you’ll learn how to:</p>
-    <ul>
-      <li>Install and connect the PAD agent (Machine Runtime)</li>
-      <li>Register your machine in the Power Automate portal</li>
-      <li>Organize machines into groups</li>
-      <li>Build and run a desktop flow</li>
-      <li>Monitor runs and errors via the <strong>Desktop flow activity</strong> dashboard</li>
-      <li>(Optional) Surface deeper insights in Power BI</li>
-    </ul>
-
-    <h2 id="prereq">Prerequisites</h2>
-    <ul>
-      <li>A Microsoft 365 account with a Power Automate license (per-user or per-flow plan).</li>
-      <li>Administrator rights on the Windows PC(s) you’ll use for RPA.</li>
-      <li>Internet access to <a href="https://make.powerautomate.com">make.powerautomate.com</a>.</li>
-    </ul>
-
-    <h2 id="install">1. Install Power Automate Desktop</h2>
-    <ol>
-      <li>Go to <a href="https://aka.ms/PADDownload">https://aka.ms/PADDownload</a> and download the latest installer.</li>
-      <li>Run the MSI as an administrator, follow the wizard, and complete installation.</li>
-      <li>Launch Power Automate Desktop and sign in with your Microsoft account.</li>
-    </ol>
-
-    <h2 id="runtime">2. Install &amp; Connect the Machine Runtime</h2>
-    <ol>
-      <li>In PAD, click <strong>Settings</strong> (⚙️) → <strong>Machine runtime</strong>.</li>
-      <li>Download and run the Machine Runtime installer.</li>
-      <li>During setup, select your environment (e.g. <code>vlsn2 (default)</code>) and sign in.</li>
-      <li>When complete, you’ll see a green “Connected” banner:</li>
-    </ol>
-    <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime connected">
-
-    <h2 id="register">3. Register Your Machine in the Cloud Portal</h2>
-    <ol>
-      <li>Open the Power Automate web portal: <a href="https://make.powerautomate.com">make.powerautomate.com</a>.</li>
-      <li>In the left nav, go to <strong>Machines</strong> → <strong>Machines</strong>.</li>
-      <li>Click <strong>+ Hosted machine</strong> (or <strong>+ Machine</strong> for local).</li>
-      <li>Give it a friendly name (e.g. <code>LT-2021-013</code>) and click <strong>Save</strong>.</li>
-    </ol>
-
-    <h2 id="groups">4. Create a Machine Group</h2>
-    <p>Machine Groups let you load-balance desktop flows across multiple agents:</p>
-    <ol>
-      <li>Within <strong>Machines</strong>, switch to the <strong>Machine groups</strong> tab.</li>
-      <li>Click <strong>+ Hosted machine group</strong>.</li>
-      <li>Name it (e.g. <code>DemoGroupRPA</code>) and add your machines:</li>
-    </ol>
-    <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Machine groups">
-    <ol start="4">
-      <li>Assign an <strong>Access</strong> role (Owner, Admin, User) as needed.</li>
-    </ol>
-
-    <h2 id="flows">5. Build &amp; Run a Desktop Flow</h2>
-    <ol>
-      <li>In PAD or in the portal under <strong>My flows</strong>, click <strong>New flow</strong> → <strong>Desktop flow</strong>.</li>
-      <li>Give it a name (e.g. "Open a web page – Agris Demo") and click <strong>Create</strong>.</li>
-      <li>In the PAD designer, drag actions (Launch Chrome, Go to URL, etc.) to define your automation.</li>
-      <li>Save and <strong>Run</strong> locally to test.</li>
-      <li>Back in the portal under <strong>My flows</strong>, you’ll see your flow and its status:</li>
-    </ol>
-    <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="My flows list">
-
-    <h2 id="monitor">6. Monitor Desktop Flow Activity</h2>
-    <p>The <strong>Desktop flow activity</strong> dashboard gives you real-time and historical insights:</p>
-    <ol>
-      <li>In the portal’s left nav, choose <strong>Desktop flow activity</strong>.</li>
-      <li>Use filters to scope by time range, errors, flows, machines, groups, run modes, or users.</li>
-      <li>Key widgets include:<ul>
-        <li><strong>Completion status</strong> (Passed vs. Failed)</li>
-        <li><strong>Runs &amp; error rate</strong> timeline</li>
-        <li><strong>Average run duration</strong></li>
-        <li><strong>Run status trends</strong></li>
-      </ul></li>
-    </ol>
-    <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Desktop flow activity dashboard">
-
-    <h2 id="powerbi">7. (Optional) Deep-Dive with Power BI</h2>
-    <p>Click <strong>Open in Power BI</strong> at the top of the dashboard to:</p>
-    <ul>
-      <li>Stream a dataset into your Power BI workspace.</li>
-      <li>Use pre-built reports on run counts, durations, top failing steps, and more.</li>
-    </ul>
-
-    <h2>Conclusion</h2>
-    <p>You’re now set up to run production-grade desktop flows and monitor their performance end-to-end:
+    <section id="introduction" class="mb-5">
+      <h2>Introduction</h2>
+      <p>Power Automate Desktop brings low-code RPA to your Windows machines. In this tutorial you’ll learn how to:</p>
       <ul>
-        <li><strong>Machines &amp; groups</strong> give you scale and resilience.</li>
-        <li><strong>Desktop flow activity</strong> keeps you on top of errors and performance.</li>
-        <li><strong>Power BI</strong> unlocks advanced reporting for managers and auditors.</li>
+        <li>Install and connect the PAD agent</li>
+        <li>Register your machine</li>
+        <li>Create machine groups</li>
+        <li>Build and run desktop flows</li>
+        <li>Monitor via dashboards</li>
+        <li>Leverage Power BI for insights</li>
       </ul>
-      Happy automating! 🚀
-    </p>
+    </section>
 
-    <hr/>
-    <p><em>[Your Bio &amp; Social Links Here]</em></p>
-  </div>
+    <section id="install" class="mb-5">
+      <h2>1. Install Power Automate Desktop</h2>
+      <ol>
+        <li>Download installer from <a href="https://aka.ms/PADDownload">aka.ms/PADDownload</a>.</li>
+        <li>Run MSI as admin and complete setup.</li>
+        <li>Launch and sign in.</li>
+      </ol>
+    </section>
 
-  <!-- Floating Chat Button -->
+    <section id="runtime" class="mb-5">
+      <h2>2. Install &amp; Connect the Runtime</h2>
+      <ol>
+        <li>In PAD: <strong>Settings → Machine runtime</strong>.</li>
+        <li>Download and install agent.</li>
+        <li>Sign in and select environment.</li>
+      </ol>
+      <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime connected">
+    </section>
+
+    <section id="register" class="mb-5">
+      <h2>3. Register Your Machine</h2>
+      <ol>
+        <li>Go to <a href="https://make.powerautomate.com">Power Automate portal</a>.</li>
+        <li>Navigate to <strong>Machines → Machines</strong>.</li>
+        <li>Click <strong>+ Machine</strong>, name it, and save.</li>
+      </ol>
+    </section>
+
+    <section id="groups" class="mb-5">
+      <h2>4. Create a Machine Group</h2>
+      <p>Group multiple agents for load-balancing:</p>
+      <ol>
+        <li>In portal: <strong>Machines → Machine groups</strong>.</li>
+        <li>Click <strong>+ Machine group</strong> and add machines.</li>
+      </ol>
+      <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Machine groups">
+    </section>
+
+    <section id="flows" class="mb-5">
+      <h2>5. Build &amp; Run a Desktop Flow</h2>
+      <ol>
+        <li>Create a desktop flow in PAD or portal.</li>
+        <li>Drag actions, save, and run locally.</li>
+      </ol>
+      <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="Desktop flow list">
+    </section>
+
+    <section id="monitor" class="mb-5">
+      <h2>6. Monitor Desktop Flow Activity</h2>
+      <ol>
+        <li>Open <strong>Desktop flow activity</strong> in portal.</li>
+        <li>Filter by date, flow, machine, and error status.</li>
+      </ol>
+      <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Activity dashboard">
+    </section>
+
+    <section id="powerbi" class="mb-5">
+      <h2>7. Power BI Insights</h2>
+      <p>Click <strong>Open in Power BI</strong> for advanced reports and dashboards.</p>
+    </section>
+
+    <section id="video" class="mb-5">
+      <h2>8. Video Tutorial</h2>
+      <video controls>
+        <source src="tutorial.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </section>
+
+    <section id="gallery" class="mb-5 gallery">
+      <h2>9. Image Gallery</h2>
+      <div class="row g-3">
+        <div class="col-6 col-md-4"><img src="gallery1.png" alt="Step 1"></div>
+        <div class="col-6 col-md-4"><img src="gallery2.png" alt="Step 2"></div>
+        <div class="col-6 col-md-4"><img src="gallery3.png" alt="Step 3"></div>
+      </div>
+    </section>
+
+    <section id="conclusion" class="mb-5">
+      <h2>Conclusion</h2>
+      <p>You’re now equipped to implement and monitor PAD flows at scale with robust analytics.</p>
+    </section>
+
+    <footer class="text-center py-4 text-muted">
+      &copy; 2025 Nova Courses • <a href="#home">Back to Top</a>
+    </footer>
+  </main>
+
+  <!-- Floating Chat Button & Window -->
   <button id="chatBtn" class="btn btn-primary shadow-lg">
     <i class="bi bi-chat-dots-fill" style="font-size:1.5rem;"></i>
   </button>
-  <!-- Chat Window -->
   <div id="chatWindow" class="card shadow">
     <div class="card-header bg-primary text-white">Chat</div>
-    <div class="card-body p-2" style="height:250px; overflow-y:auto;">
-      <p class="text-muted small">Welcome! How can I help?</p>
-    </div>
+    <div class="card-body p-2" style="height:250px; overflow-y:auto;"></div>
     <div class="card-footer p-2">
       <div class="input-group">
         <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Type a message...">
@@ -219,25 +252,24 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS & Chat Script -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script>
-    // Toggle chat window
-    const chatBtn = document.getElementById('chatBtn');
-    const chatWindow = document.getElementById('chatWindow');
-    chatBtn.addEventListener('click', () => {
-      chatWindow.style.display = chatWindow.style.display === 'block' ? 'none' : 'block';
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.getElementById('content');
+    document.getElementById('toggleSidebar').addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      content.classList.toggle('expanded');
     });
-    // Send button (mock)
+    document.getElementById('chatBtn').addEventListener('click', () => {
+      const w = document.getElementById('chatWindow');
+      w.style.display = w.style.display === 'block' ? 'none' : 'block';
+    });
     document.getElementById('sendBtn').addEventListener('click', () => {
-      const input = document.getElementById('chatInput');
-      if (!input.value) return;
-      const p = document.createElement('p');
-      p.textContent = input.value;
-      p.classList.add('mb-1');
+      const input = document.getElementById('chatInput'); if (!input.value) return;
+      const p = document.createElement('p'); p.textContent = input.value; p.classList.add('mb-1');
       document.querySelector('#chatWindow .card-body').appendChild(p);
-      input.value = '';
-      document.querySelector('#chatWindow .card-body').scrollTop = document.querySelector('#chatWindow .card-body').scrollHeight;
+      input.value = ''; document.querySelector('#chatWindow .card-body').scrollTop = document.querySelector('#chatWindow .card-body').scrollHeight;
     });
   </script>
 </body>
