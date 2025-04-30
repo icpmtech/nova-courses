@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova Courses - Power Automate Desktop Tutorial</title>
-
-  <!-- PWA Manifest & Theme -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d6efd">
-  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-
-  <!-- Bootstrap CSS -->
-  <link
+  <title>Nova Courses - Power Automate Desktop Tutorial</title>  <!-- PWA Manifest & Theme -->  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">  <!-- Bootstrap CSS -->  <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1HIcFZ72E6K7PqPP4UmYd1zq+UstOgF6N9KI65qnm"
@@ -21,328 +14,313 @@
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
     rel="stylesheet"
-  >
-
-  <style>
-    /* Mobile-first and PWA-friendly styles */
+  >  <style>
+    /* TikTok-style theme */
+    :root {
+      --primary-bg: #000000;
+      --primary-text: #ffffff;
+      --accent-color: #fe2c55;
+    }
     body {
       font-family: Arial, sans-serif;
       scroll-behavior: smooth;
+      background-color: #f8f9fa;
     }
-    /* Top navbar */
+    /* Header */
     .navbar {
-      background-color: #ffffff;
+      background-color: var(--primary-bg);
+      color: var(--primary-text);
+      padding: 0.5rem 1rem;
     }
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      padding-top: 56px; /* height of navbar */
-      background-color: #ffffff;
-      border-right: 1px solid #e0e0e0;
-      transform: translateX(0);
-      transition: transform 0.3s ease;
-      overflow-y: auto;
-      z-index: 1020;
+    .navbar-brand img {
+      height: 40px;
+      margin-right: 0.5rem;
     }
-    .sidebar.collapsed {
-      transform: translateX(-250px);
+    .navbar-toggler {
+      border-color: var(--primary-text);
     }
-    .sidebar .nav-link {
-      color: #495057;
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+    }
+
+    /* Offcanvas menu */
+    .offcanvas-start {
+      width: 260px;
+      background-color: var(--primary-bg);
+      color: var(--primary-text);
+    }
+    .offcanvas-body .nav-link {
+      color: var(--primary-text);
       padding: 0.75rem 1.25rem;
-      transition: background-color 0.2s ease;
+      font-weight: 500;
+      transition: background-color 0.2s;
     }
-    .sidebar .nav-link:hover {
-      background-color: #f1f3f5;
+    .offcanvas-body .nav-link:hover,
+    .offcanvas-body .nav-link.active {
+      background-color: rgba(255,255,255,0.1);
+      color: var(--accent-color);
     }
-    .sidebar .nav-link.active {
-      background-color: #e9ecef;
-      font-weight: 600;
-      border-left: 4px solid #0d6efd;
-      color: #0d6efd;
-    }
+
     /* Main content */
     #content {
-      margin-left: 250px;
       padding: 70px 20px 20px;
+      margin-left: 0;
       transition: margin-left 0.3s ease;
     }
-    #content.expanded {
-      margin-left: 0;
+    @media(min-width: 992px) {
+      #content { margin-left: 260px; }
     }
-    /* Accordion in sidebar */
-    .accordion-button {
-      padding: 0.75rem 1.25rem;
+
+    /* Section headings */
+    main h2 {
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 0.3rem;
+      margin-top: 2rem;
     }
-    /* Video styling */
-    video {
-      width: 100%;
-      border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      margin-bottom: 1rem;
+
+    /* Video */
+    .ratio {
+      margin-bottom: 1.5rem;
     }
-    /* Image gallery */
+    /* Gallery */
     .gallery img {
       width: 100%;
-      border-radius: 4px;
-      transition: transform 0.3s ease;
+      border-radius: 8px;
+      transition: transform 0.3s;
     }
     .gallery img:hover {
       transform: scale(1.05);
     }
-    /* Floating chat button */
-    #chatBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
-      background-color: #0d6efd;
-      color: #ffffff;
-      border: none;
-      z-index: 1050;
+    /* Footer */
+    footer {
+      background-color: var(--primary-bg);
+      color: var(--primary-text);
+      padding: 1rem 0;
+      margin-top: 2rem;
     }
-    #chatBtn:hover {
-      transform: scale(1.1);
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
     }
-    /* Chat window */
-    #chatWindow {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 320px;
-      max-height: 420px;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      border-radius: 4px;
-      overflow: hidden;
-      z-index: 1050;
+    footer a:hover {
+      text-decoration: underline;
     }
-  </style>
-</head>
-
-<body data-bs-spy="scroll" data-bs-target="#sidebarNav" data-bs-offset="70" tabindex="0">
-
-  <!-- Top Navbar -->
-  <nav class="navbar navbar-light fixed-top shadow-sm">
-    <div class="container-fluid">
-      <button class="btn btn-outline-secondary me-2 d-lg-none" id="toggleSidebar">
-        <i class="bi bi-list"></i>
+  </style></head><body data-bs-spy="scroll" data-bs-target="#navMenu" data-bs-offset="80" tabindex="0">  <!-- Header with logo and hamburger -->  <nav class="navbar fixed-top">
+    <div class="container-fluid d-flex align-items-center">
+      <button
+        class="navbar-toggler me-2"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar"
+        aria-controls="sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand fw-bold" href="#home">Nova Courses</a>
+      <a class="navbar-brand d-flex align-items-center" href="#home">
+        <img src="logo.png" alt="Nova Courses Logo" class="img-fluid">
+        <span class="text-white fs-4">Nova Courses</span>
+      </a>
     </div>
-  </nav>
-
-  <!-- Sidebar Navigation -->
-  <nav id="sidebarNav" class="sidebar bg-light">
-    <div class="accordion" id="courseAccordion">
-      <div class="accordion-item border-0">
-        <h2 class="accordion-header" id="headingOne">
-          <button
-            class="accordion-button"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-          >
-            Course Modules
-          </button>
-        </h2>
-        <div
-          id="collapseOne"
-          class="accordion-collapse collapse show"
-          data-bs-parent="#courseAccordion"
-        >
-          <div class="accordion-body p-0">
-            <nav class="nav flex-column" id="sidebarMenu">
-              <a class="nav-link active" href="#home"><i class="bi bi-book me-1"></i>Overview</a>
-              <a class="nav-link" href="#install"><i class="bi bi-download me-1"></i>Install PAD</a>
-              <a class="nav-link" href="#runtime"><i class="bi bi-plug me-1"></i>Setup Runtime</a>
-              <a class="nav-link" href="#register"><i class="bi bi-hdd-network me-1"></i>Register Machine</a>
-              <a class="nav-link" href="#groups"><i class="bi bi-people me-1"></i>Machine Groups</a>
-              <a class="nav-link" href="#flows"><i class="bi bi-ui-checks me-1"></i>Create Flows</a>
-              <a class="nav-link" href="#monitor"><i class="bi bi-bar-chart me-1"></i>Monitor Activity</a>
-              <a class="nav-link" href="#powerbi"><i class="bi bi-pie-chart me-1"></i>Power BI Insights</a>
-              <a class="nav-link" href="#video"><i class="bi bi-play-circle me-1"></i>Video Tutorial</a>
-              <a class="nav-link" href="#gallery"><i class="bi bi-images me-1"></i>Image Gallery</a>
-              <a class="nav-link" href="#conclusion"><i class="bi bi-check-circle me-1"></i>Conclusion</a>
-            </nav>
-          </div>
-        </div>
-      </div>
+  </nav>  <!-- Offcanvas Sidebar Menu -->  <div
+    class="offcanvas offcanvas-start"
+    tabindex="-1"
+    id="sidebar"
+    aria-labelledby="sidebarLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title text-white" id="sidebarLabel">Menu</h5>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="offcanvas"
+        aria-label="Fechar"
+      ></button>
     </div>
-  </nav>
+    <div class="offcanvas-body p-0">
+      <nav class="nav flex-column" id="navMenu">
+        <a class="nav-link active" href="#home"><i class="bi bi-house-door-fill me-2"></i>Visão Geral</a>
+        <a class="nav-link" href="#introduction"><i class="bi bi-info-circle me-2"></i>Introdução</a>
+        <a class="nav-link" href="#prereq"><i class="bi bi-card-list me-2"></i>Pré-requisitos</a>
+        <a class="nav-link" href="#install"><i class="bi bi-download me-2"></i>Instalar PAD</a>
+        <a class="nav-link" href="#runtime"><i class="bi bi-plug me-2"></i>Configurar Runtime</a>
+        <a class="nav-link" href="#register"><i class="bi bi-hdd-network me-2"></i>Registrar Máquina</a>
+        <a class="nav-link" href="#groups"><i class="bi bi-people me-2"></i>Grupos de Máquinas</a>
+        <a class="nav-link" href="#flows"><i class="bi bi-ui-checks me-2"></i>Criar Flows</a>
+        <a class="nav-link" href="#monitor"><i class="bi bi-bar-chart me-2"></i>Monitorar Atividade</a>
+        <a class="nav-link" href="#powerbi"><i class="bi bi-pie-chart me-2"></i>Power BI Insights</a>
+        <a class="nav-link" href="#video"><i class="bi bi-play-circle me-2"></i>Vídeo Tutorial</a>
+        <a class="nav-link" href="#gallery"><i class="bi bi-images me-2"></i>Galeria de Imagens</a>
+        <a class="nav-link" href="#conclusion"><i class="bi bi-check-circle me-2"></i>Conclusão</a>
+      </nav>
+    </div>
+  </div>  <!-- Main Content -->  <main id="content" class="container-fluid"><section id="home" class="mb-5">
+  <h1 class="text-primary">Como Configurar o Power Automate Desktop e Monitorar Analytics</h1>
+  <p class="text-muted"><em>Por [Seu Nome], [Data]</em></p>
+</section>
 
-  <!-- Main Content -->
-  <main id="content">
+<section id="introduction" class="mb-5">
+  <h2>Introdução</h2>
+  <p>Power Automate Desktop traz low-code RPA para Windows. Neste tutorial, você aprenderá a:</p>
+  <ul>
+    <li>Instalar e conectar o agente PAD</li>
+    <li>Registrar sua máquina</li>
+    <li>Criar grupos de máquinas</li>
+    <li>Construir e executar fluxos desktop</li>
+    <li>Monitorar via painel de atividade</li>
+    <li>Usar Power BI para insights</li>
+  </ul>
+</section>
 
-    <section id="home" class="mb-5">
-      <h1>How to Configure Power Automate Desktop for RPA &amp; Monitor Analytics</h1>
-      <p class="text-muted"><em>By [Your Name], [Date]</em></p>
-    </section>
+<section id="prereq" class="mb-5">
+  <h2>Pré-requisitos</h2>
+  <ul>
+    <li>Conta Microsoft 365 com licença Power Automate</li>
+    <li>Permissão de administrador no Windows</li>
+    <li>Acesso à internet ao portal Power Automate</li>
+  </ul>
+</section>
 
-    <section id="introduction" class="mb-5">
-      <h2>Introduction</h2>
-      <p>
-        Power Automate Desktop brings low-code RPA to your Windows machines. In this tutorial you'll learn how to:
-      </p>
-      <ul>
-        <li>Install and connect the PAD agent</li>
-        <li>Register your machine</li>
-        <li>Create machine groups</li>
-        <li>Build and run desktop flows</li>
-        <li>Monitor via dashboards</li>
-        <li>Leverage Power BI for insights</li>
-      </ul>
-    </section>
+<section id="install" class="mb-5">
+  <h2>1. Instalar Power Automate Desktop</h2>
+  <ol>
+    <li>Baixe o instalador em <a href="https://aka.ms/PADDownload">aka.ms/PADDownload</a>.</li>
+    <li>Execute o MSI como administrador e conclua a instalação.</li>
+    <li>Abra o PAD e faça login.</li>
+  </ol>
+</section>
 
-    <section id="install" class="mb-5">
-      <h2>1. Install Power Automate Desktop</h2>
-      <ol>
-        <li>Download installer from <a href="https://aka.ms/PADDownload">aka.ms/PADDownload</a>.</li>
-        <li>Run the MSI as administrator and complete setup.</li>
-        <li>Launch Power Automate Desktop and sign in.</li>
-      </ol>
-    </section>
+<section id="runtime" class="mb-5">
+  <h2>2. Configurar o Machine Runtime</h2>
+  <ol>
+    <li>No PAD, vá em <strong>Configurações → Machine runtime</strong>.</li>
+    <li>Baixe e instale o agente.</li>
+    <li>Faça login e selecione o ambiente.</li>
+  </ol>
+  <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime conectado" class="img-fluid rounded">
+</section>
 
-    <section id="runtime" class="mb-5">
-      <h2>2. Install &amp; Connect the Machine Runtime</h2>
-      <ol>
-        <li>In PAD, go to <strong>Settings → Machine runtime</strong>.</li>
-        <li>Download and install the runtime agent.</li>
-        <li>Sign in and select your environment.</li>
-      </ol>
-      <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime Connected">
-    </section>
+<section id="register" class="mb-5">
+  <h2>3. Registrar sua Máquina</h2>
+  <ol>
+    <li>Acesse o <a href="https://make.powerautomate.com">portal do Power Automate</a>.</li>
+    <li>Navegue até <strong>Máquinas → Máquinas</strong>.</li>
+    <li>Clique em <strong>+ Máquina</strong>, dê um nome e salve.</li>
+  </ol>
+</section>
 
-    <section id="register" class="mb-5">
-      <h2>3. Register Your Machine</h2>
-      <ol>
-        <li>Open the <a href="https://make.powerautomate.com">Power Automate portal</a>.</li>
-        <li>Navigate to <strong>Machines → Machines</strong>.</li>
-        <li>Click <strong>+ Machine</strong>, give it a name, and save.</li>
-      </ol>
-    </section>
+<section id="groups" class="mb-5">
+  <h2>4. Criar um Grupo de Máquinas</h2>
+  <p>Para balancear cargas entre vários agentes:</p>
+  <ol>
+    <li>No portal, acesse <strong>Máquinas → Grupos de máquinas</strong>.</li>
+    <li>Clique em <strong>+ Grupo de máquinas</strong> e adicione suas máquinas.</li>
+  </ol>
+  <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Grupos de máquinas" class="img-fluid rounded">
+</section>
 
-    <section id="groups" class="mb-5">  
-      <h2>4. Create a Machine Group</h2>
-      <p>Group multiple agents to balance workloads:</p>
-      <ol>
-        <li>In portal: <strong>Machines → Machine groups</strong>.</li>
-        <li>Click <strong>+ Machine group</strong> and add your machines.</li>
-      </ol>
-      <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Machine Groups">
-    </section>
+<section id="flows" class="mb-5">
+  <h2>5. Criar & Executar um Fluxo Desktop</h2>
+  <ol>
+    <li>No PAD ou portal, crie um novo fluxo desktop.</li>
+    <li>Arraste ações, salve e execute localmente.</li>
+  </ol>
+  <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="Lista de fluxos desktop" class="img-fluid rounded">
+</section>
 
-    <section id="flows" class="mb-5">
-      <h2>5. Build &amp; Run a Desktop Flow</h2>
-      <ol>
-        <li>Create a desktop flow in PAD or in the portal.</li>
-        <li>Drag actions, save, and run locally.</li>
-      </ol>
-      <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="Desktop Flow List">
-    </section>
+<section id="monitor" class="mb-5">
+  <h2>6. Monitorar Atividade</h2>
+  <ol>
+    <li>Abra o painel <strong>Atividade de fluxo desktop</strong> no portal.</li>
+    <li>Filtre por período, fluxo, máquina ou erros.</li>
+  </ol>
+  <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Painel de atividade" class="img-fluid rounded">
+</section>
 
-    <section id="monitor" class="mb-5">
-      <h2>6. Monitor Desktop Flow Activity</h2>
-      <ol>
-        <li>Open the <strong>Desktop flow activity</strong> dashboard in the portal.</li>
-        <li>Filter by time range, flow, machine, or error status.</li>
-      </ol>
-      <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Activity Dashboard">
-    </section>
+<section id="powerbi" class="mb-5">
+  <h2>7. Insights no Power BI</h2>
+  <p>Clique em <strong>Open in Power BI</strong> para relatórios avançados.</p>
+</section>
 
-    <section id="powerbi" class="mb-5">
-      <h2>7. Power BI Insights</h2>
-      <p>
-        Click <strong>Open in Power BI</strong> for advanced, customizable reports and dashboards on your desktop flows.
-      </p>
-    </section>
+<section id="video" class="mb-5">
+  <h2>8. Vídeo Tutorial</h2>
+  <div class="ratio ratio-16x9">
+    <video controls class="w-100 h-100 rounded">
+      <source src="tutorial.mp4" type="video/mp4">
+      Seu navegador não suporta a tag de vídeo.
+    </video>
+  </div>
+</section>
 
-    <section id="video" class="mb-5">
-      <h2>8. Video Tutorial</h2>
-      <video controls>
-        <source src="tutorial.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </section>
+<section id="gallery" class="mb-5 gallery">
+  <h2>9. Galeria de Imagens</h2>
+  <div class="row g-3">
+    <div class="col-6 col-md-4"><img src="gallery1.png" alt="Passo 1" class="img-fluid rounded"></div>
+    <div class="col-6 col-md-4"><img src="gallery2.png" alt="Passo 2" class="img-fluid rounded"></div>
+    <div class="col-6 col-md-4"><img src="gallery3.png" alt="Passo 3" class="img-fluid rounded"></div>
+  </div>
+</section>
 
-    <section id="gallery" class="mb-5 gallery">
-      <h2>9. Image Gallery</h2>
-      <div class="row g-3">
-        <div class="col-6 col-md-4"><img src="gallery1.png" alt="Step 1"></div>
-        <div class="col-6 col-md-4"><img src="gallery2.png" alt="Step 2"></div>
-        <div class="col-6 col-md-4"><img src="gallery3.png" alt="Step 3"></div>
-      </div>
-    </section>
+<section id="conclusion" class="mb-5">
+  <h2>Conclusão</h2>
+  <p>Agora você está pronto para implementar, escalar e monitorar seus fluxos com análise avançada!</p>
+</section>
 
-    <section id="conclusion" class="mb-5">
-      <h2>Conclusion</h2>
-      <p>
-        You’re now equipped to implement, scale, and monitor your Power Automate Desktop flows with modern analytics and a PWA-enabled interface.
-      </p>
-    </section>
+<footer>
+  <div class="container text-center">
+    <p>&copy; 2025 Nova Courses. Todos os direitos reservados.</p>
+    <p>
+      <a href="#">Política de Privacidade</a> •
+      <a href="#">Termos de Uso</a>
+    </p>
+  </div>
+</footer>
 
-    <footer class="text-center py-4 text-muted">
-      &copy; 2025 Nova Courses • <a href="#home">Back to Top</a>
-    </footer>
-
-  </main>
-
-  <!-- Floating Chat Button & Chat Window -->
-  <button id="chatBtn"><i class="bi bi-chat-dots-fill" style="font-size:1.5rem;"></i></button>
-  <div id="chatWindow" class="card">
+  </main>  <!-- Floating Chat Button & Window -->  <button id="chatBtn" class="btn btn-primary shadow-lg rounded-circle">
+    <i class="bi bi-chat-dots-fill" style="font-size:1.5rem;"></i>
+  </button>
+  <div id="chatWindow" class="card shadow rounded" style="display:none; position:fixed; bottom:90px; right:20px; width:320px;">
     <div class="card-header bg-primary text-white">Chat</div>
     <div class="card-body p-2" style="height:250px; overflow-y:auto;"></div>
     <div class="card-footer p-2">
       <div class="input-group">
-        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Type a message...">
-        <button class="btn btn-primary btn-sm" id="sendBtn">Send</button>
+        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Digitar mensagem...">
+        <button class="btn btn-primary btn-sm" id="sendBtn">Enviar</button>
       </div>
     </div>
-  </div>
-
-  <!-- Bootstrap JS & PWA Service Worker Registration -->
-  <script
+  </div>  <!-- Bootstrap JS & PWA Service Worker -->  <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"
-  ></script>
-  <script>
-    // Sidebar toggle for mobile
-    document.getElementById('toggleSidebar').addEventListener('click', () => {
-      document.querySelector('.sidebar').classList.toggle('collapsed');
-      document.getElementById('content').classList.toggle('expanded');
+  ></script>  <script>
+    // ScrollSpy
+    new bootstrap.ScrollSpy(document.body, {
+      target: '#navMenu',
+      offset: 80
     });
-    // Chat button toggle
+    // Close offcanvas on link click
+    document.querySelectorAll('#navMenu .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const offcanvasEl = document.getElementById('sidebar');
+        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+        if (bsOffcanvas) bsOffcanvas.hide();
+      });
+    });
+    // Chat toggle
     document.getElementById('chatBtn').addEventListener('click', () => {
       const w = document.getElementById('chatWindow');
-      w.style.display = (w.style.display === 'block') ? 'none' : 'block';
+      w.style.display = w.style.display === 'block' ? 'none' : 'block';
     });
-    // Mock chat send
     document.getElementById('sendBtn').addEventListener('click', () => {
       const input = document.getElementById('chatInput');
       if (!input.value) return;
-      const p = document.createElement('p');
-      p.textContent = input.value;
-      p.classList.add('mb-1');
+      const p = document.createElement('p'); p.textContent = input.value; p.classList.add('mb-1');
       document.querySelector('#chatWindow .card-body').appendChild(p);
       input.value = '';
-      document.querySelector('#chatWindow .card-body').scrollTop =
-        document.querySelector('#chatWindow .card-body').scrollHeight;
+      document.querySelector('#chatWindow .card-body').scrollTop = document.querySelector('#chatWindow .card-body').scrollHeight;
     });
-    // Register service worker for PWA
+    // Register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js').catch(console.error);
     }
-  </script>
-</body>
+  </script></body>
 </html>
