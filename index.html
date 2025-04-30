@@ -1,1 +1,213 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Configure Power Automate Desktop & Monitor Analytics</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1HIcFZ72E6K7PqPP4UmYd1zq+UstOgF6N9KI65qnm" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; font-family: Arial, sans-serif; line-height: 1.6; }
+    img { max-width: 100%; height: auto; margin: 15px 0; }
+    code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+    pre { background: #f4f4f4; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    /* Floating chat button */
+    #chatBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      z-index: 1050;
+    }
+    /* Chat window */
+    #chatWindow {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      display: none;
+      z-index: 1050;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Bootstrap Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">PAD Tutorial</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#install">Install</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#register">Register Machine</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#monitor">Analytics</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 id="home">How to Configure Power Automate Desktop for RPA &amp; Monitor Analytics</h1>
+    <p><em>By [Your Name], [Date]</em></p>
+
+    <h2>Introduction</h2>
+    <p>
+      Power Automate Desktop brings low-code robotic process automation (RPA) to your Windows machines
+      and lets you orchestrate, schedule, and monitor your desktop flows from the cloud. In this tutorial you’ll learn how to:
+    </p>
+    <ul>
+      <li>Install and connect the PAD agent (Machine Runtime)</li>
+      <li>Register your machine in the Power Automate portal</li>
+      <li>Organize machines into groups</li>
+      <li>Build and run a desktop flow</li>
+      <li>Monitor runs and errors via the <strong>Desktop flow activity</strong> dashboard</li>
+      <li>(Optional) Surface deeper insights in Power BI</li>
+    </ul>
+
+    <h2 id="prereq">Prerequisites</h2>
+    <ul>
+      <li>A Microsoft 365 account with a Power Automate license (per-user or per-flow plan).</li>
+      <li>Administrator rights on the Windows PC(s) you’ll use for RPA.</li>
+      <li>Internet access to <a href="https://make.powerautomate.com">make.powerautomate.com</a>.</li>
+    </ul>
+
+    <h2 id="install">1. Install Power Automate Desktop</h2>
+    <ol>
+      <li>Go to <a href="https://aka.ms/PADDownload">https://aka.ms/PADDownload</a> and download the latest installer.</li>
+      <li>Run the MSI as an administrator, follow the wizard, and complete installation.</li>
+      <li>Launch Power Automate Desktop and sign in with your Microsoft account.</li>
+    </ol>
+
+    <h2 id="runtime">2. Install &amp; Connect the Machine Runtime</h2>
+    <ol>
+      <li>In PAD, click <strong>Settings</strong> (⚙️) → <strong>Machine runtime</strong>.</li>
+      <li>Download and run the Machine Runtime installer.</li>
+      <li>During setup, select your environment (e.g. <code>vlsn2 (default)</code>) and sign in.</li>
+      <li>When complete, you’ll see a green “Connected” banner:</li>
+    </ol>
+    <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime connected">
+
+    <h2 id="register">3. Register Your Machine in the Cloud Portal</h2>
+    <ol>
+      <li>Open the Power Automate web portal: <a href="https://make.powerautomate.com">make.powerautomate.com</a>.</li>
+      <li>In the left nav, go to <strong>Machines</strong> → <strong>Machines</strong>.</li>
+      <li>Click <strong>+ Hosted machine</strong> (or <strong>+ Machine</strong> for local).</li>
+      <li>Give it a friendly name (e.g. <code>LT-2021-013</code>) and click <strong>Save</strong>.</li>
+    </ol>
+
+    <h2 id="groups">4. Create a Machine Group</h2>
+    <p>Machine Groups let you load-balance desktop flows across multiple agents:</p>
+    <ol>
+      <li>Within <strong>Machines</strong>, switch to the <strong>Machine groups</strong> tab.</li>
+      <li>Click <strong>+ Hosted machine group</strong>.</li>
+      <li>Name it (e.g. <code>DemoGroupRPA</code>) and add your machines:</li>
+    </ol>
+    <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Machine groups">
+    <ol start="4">
+      <li>Assign an <strong>Access</strong> role (Owner, Admin, User) as needed.</li>
+    </ol>
+
+    <h2 id="flows">5. Build &amp; Run a Desktop Flow</h2>
+    <ol>
+      <li>In PAD or in the portal under <strong>My flows</strong>, click <strong>New flow</strong> → <strong>Desktop flow</strong>.</li>
+      <li>Give it a name (e.g. “Open a web page – Agris Demo”) and click <strong>Create</strong>.</li>
+      <li>In the PAD designer, drag actions (Launch Chrome, Go to URL, etc.) to define your automation.</li>
+      <li>Save and <strong>Run</strong> locally to test.</li>
+      <li>Back in the portal under <strong>My flows</strong>, you’ll see your flow and its status:</li>
+    </ol>
+    <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="My flows list">
+
+    <h2 id="monitor">6. Monitor Desktop Flow Activity</h2>
+    <p>The <strong>Desktop flow activity</strong> dashboard gives you real-time and historical insights:</p>
+    <ol>
+      <li>In the portal’s left nav, choose <strong>Desktop flow activity</strong>.</li>
+      <li>Use filters to scope by time range, errors, flows, machines, groups, run modes, or users.</li>
+      <li>Key widgets include:<ul>
+        <li><strong>Completion status</strong> (Passed vs. Failed)</li>
+        <li><strong>Runs &amp; error rate</strong> timeline</li>
+        <li><strong>Average run duration</strong></li>
+        <li><strong>Run status trends</strong></li>
+      </ul></li>
+    </ol>
+    <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Desktop flow activity dashboard">
+
+    <h2 id="powerbi">7. (Optional) Deep-Dive with Power BI</h2>
+    <p>Click <strong>Open in Power BI</strong> at the top of the dashboard to:</p>
+    <ul>
+      <li>Stream a dataset into your Power BI workspace.</li>
+      <li>Use pre-built reports on run counts, durations, top failing steps, and more.</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>You’re now set up to run production-grade desktop flows and monitor their performance end-to-end:
+      <ul>
+        <li><strong>Machines &amp; groups</strong> give you scale and resilience.</li>
+        <li><strong>Desktop flow activity</strong> keeps you on top of errors and performance.</li>
+        <li><strong>Power BI</strong> unlocks advanced reporting for managers and auditors.</li>
+      </ul>
+      Happy automating! 🚀
+    </p>
+
+    <hr/>
+    <p><em>[Your Bio &amp; Social Links Here]</em></p>
+  </div>
+
+  <!-- Floating Chat Button -->
+  <button id="chatBtn" class="btn btn-primary shadow-lg">
+    <i class="bi bi-chat-dots-fill" style="font-size:1.5rem;"></i>
+  </button>
+  <!-- Chat Window -->
+  <div id="chatWindow" class="card shadow">
+    <div class="card-header bg-primary text-white">Chat</div>
+    <div class="card-body p-2" style="height:250px; overflow-y:auto;">
+      <p class="text-muted small">Welcome! How can I help?</p>
+    </div>
+    <div class="card-footer p-2">
+      <div class="input-group">
+        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Type a message...">
+        <button class="btn btn-primary btn-sm" id="sendBtn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS & Chat Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script>
+    // Toggle chat window
+    const chatBtn = document.getElementById('chatBtn');
+    const chatWindow = document.getElementById('chatWindow');
+    chatBtn.addEventListener('click', () => {
+      chatWindow.style.display = chatWindow.style.display === 'block' ? 'none' : 'block';
+    });
+    // Send button (mock)
+    document.getElementById('sendBtn').addEventListener('click', () => {
+      const input = document.getElementById('chatInput');
+      if (!input.value) return;
+      const p = document.createElement('p');
+      p.textContent = input.value;
+      p.classList.add('mb-1');
+      document.querySelector('#chatWindow .card-body').appendChild(p);
+      input.value = '';
+      document.querySelector('#chatWindow .card-body').scrollTop = document.querySelector('#chatWindow .card-body').scrollHeight;
+    });
+  </script>
+</body>
+</html>
