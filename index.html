@@ -1,111 +1,654 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova Courses - Power Automate Desktop Tutorial</title>  <!-- PWA Manifest & Theme -->  <link rel="manifest" href="manifest.json">
+  <title>Nova Courses - Power Automate Desktop Tutorial</title>
+  
+  <!-- PWA Manifest & Theme -->
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
-  <link rel="apple-touch-icon" href="icons/icon-192x192.png">  <!-- Bootstrap CSS -->  <link
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  
+  <!-- Bootstrap CSS -->
+  <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    
     crossorigin="anonymous"
   >
+  
   <!-- Bootstrap Icons -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
     rel="stylesheet"
-  >  <style>
-    /* TikTok-style theme */
+  >
+  
+  <style>
+    /* TikTok-style theme - Enhanced */
     :root {
-      --primary-bg: #000000;
+      --primary-bg: #010101;
+      --secondary-bg: #121212;
+      --card-bg: #1f1f1f;
       --primary-text: #ffffff;
+      --secondary-text: #b0b0b0;
       --accent-color: #fe2c55;
+      --accent-hover: #ff4d79;
+      --blue-accent: #25F4EE;
     }
+    
     body {
-      font-family: Arial, sans-serif;
-      scroll-behavior: smooth;
-      background-color: #f8f9fa;
-    }
-    /* Header */
-    .navbar {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--primary-bg);
       color: var(--primary-text);
+      scroll-behavior: smooth;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* ===== HEADER ===== */
+    .navbar {
+      background-color: rgba(1, 1, 1, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
     }
+    
+    .navbar.scrolled {
+      padding: 0.35rem 1rem;
+    }
+    
     .navbar-brand img {
-      height: 40px;
+      height: 36px;
       margin-right: 0.5rem;
+      filter: drop-shadow(0 0 5px rgba(254, 44, 85, 0.5));
     }
+    
     .navbar-toggler {
-      border-color: var(--primary-text);
+      border: none;
+      padding: 0.25rem;
     }
+    
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+    
     .navbar-toggler-icon {
       background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
     }
 
-    /* Offcanvas menu */
+    /* ===== OFF-CANVAS MENU ===== */
     .offcanvas-start {
-      width: 260px;
-      background-color: var(--primary-bg);
+      width: 82%;
+      max-width: 280px;
+      background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
       color: var(--primary-text);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
+    
+    .offcanvas-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .offcanvas-title {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .offcanvas-body {
+      padding: 0;
+    }
+    
     .offcanvas-body .nav-link {
       color: var(--primary-text);
-      padding: 0.75rem 1.25rem;
+      padding: 0.85rem 1.25rem;
       font-weight: 500;
-      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.025);
+      position: relative;
+      transition: all 0.2s ease;
     }
+    
+    .offcanvas-body .nav-link i {
+      font-size: 1.2rem;
+      margin-right: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
     .offcanvas-body .nav-link:hover,
     .offcanvas-body .nav-link.active {
-      background-color: rgba(255,255,255,0.1);
+      background-color: rgba(254, 44, 85, 0.08);
+    }
+    
+    .offcanvas-body .nav-link:hover i,
+    .offcanvas-body .nav-link.active i {
       color: var(--accent-color);
     }
+    
+    .offcanvas-body .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent-color), var(--blue-accent));
+    }
 
-    /* Main content */
+    /* ===== MAIN CONTENT ===== */
     #content {
-      padding: 70px 20px 20px;
-      margin-left: 0;
+      padding: 70px 0 0;
       transition: margin-left 0.3s ease;
     }
-    @media(min-width: 992px) {
-      #content { margin-left: 260px; }
+    
+    section {
+      padding: 1.5rem 1.25rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    section:nth-child(odd) {
+      background-color: rgba(255, 255, 255, 0.02);
     }
 
     /* Section headings */
+    main h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary-text), var(--secondary-text));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
     main h2 {
-      border-bottom: 2px solid var(--accent-color);
-      padding-bottom: 0.3rem;
-      margin-top: 2rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    main h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      width: 40px;
+      background: linear-gradient(to right, var(--accent-color), var(--blue-accent));
+      border-radius: 3px;
     }
 
-    /* Video */
-    .ratio {
-      margin-bottom: 1.5rem;
+    /* Content Cards */
+    .content-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    /* Gallery */
-    .gallery img {
+    
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .content-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary-text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .content-card h3 i {
+      color: var(--accent-color);
+      margin-right: 0.5rem;
+    }
+    
+    .content-card p, .content-card li {
+      color: var(--secondary-text);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .content-card ul, .content-card ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+    
+    .content-card li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .content-card li:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Image styling */
+    img.screenshot {
       width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 1rem 0;
       transition: transform 0.3s;
     }
-    .gallery img:hover {
+
+    /* Video Container */
+    .video-container {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .video-container .ratio {
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    
+    .video-container video {
+      object-fit: cover;
+    }
+
+    /* Gallery */
+    .gallery {
+      margin: 1.5rem 0;
+    }
+    
+    .gallery .image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .gallery img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery .image-container:hover img {
       transform: scale(1.05);
     }
+    
+    .gallery .image-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .gallery .image-overlay i {
+      color: var(--accent-color);
+      margin-right: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .gallery .image-overlay span {
+      color: var(--primary-text);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Button styles */
+    .btn-tiktok {
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+      border: none;
+      color: white;
+      font-weight: 600;
+      border-radius: 30px;
+      padding: 0.6rem 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(254, 44, 85, 0.3);
+    }
+    
+    .btn-tiktok:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(254, 44, 85, 0.4);
+      color: white;
+    }
+    
+    .btn-tiktok:active {
+      transform: translateY(0);
+    }
+
     /* Footer */
     footer {
       background-color: var(--primary-bg);
-      color: var(--primary-text);
-      padding: 1rem 0;
-      margin-top: 2rem;
+      color: var(--secondary-text);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
+    
+    footer .social-links {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    footer .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      color: var(--primary-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0.5rem;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+    
+    footer .social-links a:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
     footer a {
       color: var(--accent-color);
       text-decoration: none;
+      transition: all 0.2s ease;
     }
+    
     footer a:hover {
-      text-decoration: underline;
+      color: var(--blue-accent);
+      text-decoration: none;
     }
-  </style></head><body data-bs-spy="scroll" data-bs-target="#navMenu" data-bs-offset="80" tabindex="0">  <!-- Header with logo and hamburger -->  <nav class="navbar fixed-top">
+
+    /* Floating Action Button (FAB) Chat */
+    #chatBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4);
+      border: none;
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    #chatBtn:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+    
+    #chatBtn:active {
+      transform: scale(0.95);
+    }
+    
+    #chatBtn i {
+      font-size: 1.5rem;
+    }
+    
+    #chatWindow {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      z-index: 999;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.3s forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    #chatWindow .card-header {
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    #chatWindow .card-header .close-chat {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 0;
+      cursor: pointer;
+    }
+    
+    #chatWindow .card-body {
+      height: 250px;
+      overflow-y: auto;
+      background-color: var(--secondary-bg);
+      padding: 1rem;
+    }
+    
+    #chatWindow .card-body p {
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 16px;
+      max-width: 80%;
+      word-break: break-word;
+    }
+    
+    #chatWindow .card-body p.user-message {
+      background-color: var(--accent-color);
+      color: white;
+      border-top-right-radius: 4px;
+      margin-left: auto;
+    }
+    
+    #chatWindow .card-body p.bot-message {
+      background-color: var(--card-bg);
+      color: var(--primary-text);
+      border-top-left-radius: 4px;
+      margin-right: auto;
+    }
+    
+    #chatWindow .card-footer {
+      background-color: var(--secondary-bg);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.75rem;
+    }
+    
+    #chatWindow .input-group .form-control {
+      background-color: var(--card-bg);
+      color: var(--primary-text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px 0 0 20px;
+      padding: 0.5rem 0.75rem;
+    }
+    
+    #chatWindow .input-group .form-control:focus {
+      box-shadow: none;
+      border-color: var(--accent-color);
+    }
+    
+    #chatWindow .input-group .btn {
+      border-radius: 0 20px 20px 0;
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+      border: none;
+      padding: 0.5rem 1rem;
+    }
+
+    /* Progress indicator */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1020;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-accent), var(--accent-color));
+      width: 0%;
+      border-radius: 0 3px 3px 0;
+      transition: width 0.1s ease;
+    }
+
+    /* Section Navigation Dots */
+    .section-dots {
+      position: fixed;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    
+    .section-dots .dot {
+      width: 8px;
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      margin: 8px 0;
+      transition: all 0.3s ease;
+    }
+    
+    .section-dots .dot.active {
+      background-color: var(--accent-color);
+      transform: scale(1.5);
+    }
+
+    /* Swipe indicator */
+    .swipe-indicator {
+      position: fixed;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border-radius: 30px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: (100);
+    }
+    
+    .swipe-indicator.show {
+      opacity: 1;
+      animation: fadeInOut 2s ease;
+    }
+    
+    .swipe-indicator i {
+      color: var(--accent-color);
+      margin-right: 0.5rem;
+    }
+    
+    .swipe-indicator span {
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      #content {
+        padding-top: 70px;
+        margin-left: 0;
+      }
+      
+      section {
+        padding: 2rem;
+      }
+      
+      main h1 {
+        font-size: 2.2rem;
+      }
+      
+      main h2 {
+        font-size: 1.6rem;
+      }
+      
+      .gallery img {
+        height: 200px;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      .offcanvas-start {
+        transform: none;
+        visibility: visible;
+        top: 70px;
+        height: calc(100% - 70px);
+      }
+      
+      #content {
+        margin-left: 280px;
+      }
+      
+      .navbar-toggler {
+        display: none;
+      }
+      
+      section {
+        padding: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#navMenu" data-bs-offset="80">
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Header with logo and hamburger -->
+  <nav class="navbar fixed-top" id="mainNav">
     <div class="container-fluid d-flex align-items-center">
       <button
         class="navbar-toggler me-2"
@@ -118,17 +661,22 @@
       </button>
       <a class="navbar-brand d-flex align-items-center" href="#home">
         <img src="logo.png" alt="Nova Courses Logo" class="img-fluid">
-        <span class="text-white fs-4">Nova Courses</span>
+        <span class="text-white fs-5">Nova Courses</span>
       </a>
     </div>
-  </nav>  <!-- Offcanvas Sidebar Menu -->  <div
+  </nav>
+
+  <!-- Offcanvas Sidebar Menu -->
+  <div
     class="offcanvas offcanvas-start"
     tabindex="-1"
     id="sidebar"
     aria-labelledby="sidebarLabel"
   >
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title text-white" id="sidebarLabel">Menu</h5>
+      <h5 class="offcanvas-title" id="sidebarLabel">
+        <i class="bi bi-grid-fill me-2 text-accent"></i> Tutoriais
+      </h5>
       <button
         type="button"
         class="btn-close btn-close-white"
@@ -138,189 +686,601 @@
     </div>
     <div class="offcanvas-body p-0">
       <nav class="nav flex-column" id="navMenu">
-        <a class="nav-link active" href="#home"><i class="bi bi-house-door-fill me-2"></i>Visão Geral</a>
-        <a class="nav-link" href="#introduction"><i class="bi bi-info-circle me-2"></i>Introdução</a>
-        <a class="nav-link" href="#prereq"><i class="bi bi-card-list me-2"></i>Pré-requisitos</a>
-        <a class="nav-link" href="#install"><i class="bi bi-download me-2"></i>Instalar PAD</a>
-        <a class="nav-link" href="#runtime"><i class="bi bi-plug me-2"></i>Configurar Runtime</a>
-        <a class="nav-link" href="#register"><i class="bi bi-hdd-network me-2"></i>Registrar Máquina</a>
-        <a class="nav-link" href="#groups"><i class="bi bi-people me-2"></i>Grupos de Máquinas</a>
-        <a class="nav-link" href="#flows"><i class="bi bi-ui-checks me-2"></i>Criar Flows</a>
-        <a class="nav-link" href="#monitor"><i class="bi bi-bar-chart me-2"></i>Monitorar Atividade</a>
-        <a class="nav-link" href="#powerbi"><i class="bi bi-pie-chart me-2"></i>Power BI Insights</a>
-        <a class="nav-link" href="#video"><i class="bi bi-play-circle me-2"></i>Vídeo Tutorial</a>
-        <a class="nav-link" href="#gallery"><i class="bi bi-images me-2"></i>Galeria de Imagens</a>
-        <a class="nav-link" href="#conclusion"><i class="bi bi-check-circle me-2"></i>Conclusão</a>
+        <a class="nav-link active" href="#home">
+          <i class="bi bi-house-door-fill"></i>Visão Geral
+        </a>
+        <a class="nav-link" href="#introduction">
+          <i class="bi bi-info-circle"></i>Introdução
+        </a>
+        <a class="nav-link" href="#prereq">
+          <i class="bi bi-card-list"></i>Pré-requisitos
+        </a>
+        <a class="nav-link" href="#install">
+          <i class="bi bi-download"></i>Instalar PAD
+        </a>
+        <a class="nav-link" href="#runtime">
+          <i class="bi bi-plug"></i>Configurar Runtime
+        </a>
+        <a class="nav-link" href="#register">
+          <i class="bi bi-hdd-network"></i>Registrar Máquina
+        </a>
+        <a class="nav-link" href="#groups">
+          <i class="bi bi-people"></i>Grupos de Máquinas
+        </a>
+        <a class="nav-link" href="#flows">
+          <i class="bi bi-ui-checks"></i>Criar Flows
+        </a>
+        <a class="nav-link" href="#monitor">
+          <i class="bi bi-bar-chart"></i>Monitorar Atividade
+        </a>
+        <a class="nav-link" href="#powerbi">
+          <i class="bi bi-pie-chart"></i>Power BI Insights
+        </a>
+        <a class="nav-link" href="#video">
+          <i class="bi bi-play-circle"></i>Vídeo Tutorial
+        </a>
+        <a class="nav-link" href="#gallery">
+          <i class="bi bi-images"></i>Galeria de Imagens
+        </a>
+        <a class="nav-link" href="#conclusion">
+          <i class="bi bi-check-circle"></i>Conclusão
+        </a>
       </nav>
     </div>
-  </div>  <!-- Main Content -->  <main id="content" class="container-fluid"><section id="home" class="mb-5">
-  <h1 class="text-primary">Como Configurar o Power Automate Desktop e Monitorar Analytics</h1>
-  <p class="text-muted"><em>Por [Seu Nome], [Data]</em></p>
-</section>
-
-<section id="introduction" class="mb-5">
-  <h2>Introdução</h2>
-  <p>Power Automate Desktop traz low-code RPA para Windows. Neste tutorial, você aprenderá a:</p>
-  <ul>
-    <li>Instalar e conectar o agente PAD</li>
-    <li>Registrar sua máquina</li>
-    <li>Criar grupos de máquinas</li>
-    <li>Construir e executar fluxos desktop</li>
-    <li>Monitorar via painel de atividade</li>
-    <li>Usar Power BI para insights</li>
-  </ul>
-</section>
-
-<section id="prereq" class="mb-5">
-  <h2>Pré-requisitos</h2>
-  <ul>
-    <li>Conta Microsoft 365 com licença Power Automate</li>
-    <li>Permissão de administrador no Windows</li>
-    <li>Acesso à internet ao portal Power Automate</li>
-  </ul>
-</section>
-
-<section id="install" class="mb-5">
-  <h2>1. Instalar Power Automate Desktop</h2>
-  <ol>
-    <li>Baixe o instalador em <a href="https://aka.ms/PADDownload">aka.ms/PADDownload</a>.</li>
-    <li>Execute o MSI como administrador e conclua a instalação.</li>
-    <li>Abra o PAD e faça login.</li>
-  </ol>
-</section>
-
-<section id="runtime" class="mb-5">
-  <h2>2. Configurar o Machine Runtime</h2>
-  <ol>
-    <li>No PAD, vá em <strong>Configurações → Machine runtime</strong>.</li>
-    <li>Baixe e instale o agente.</li>
-    <li>Faça login e selecione o ambiente.</li>
-  </ol>
-  <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime conectado" class="img-fluid rounded">
-</section>
-
-<section id="register" class="mb-5">
-  <h2>3. Registrar sua Máquina</h2>
-  <ol>
-    <li>Acesse o <a href="https://make.powerautomate.com">portal do Power Automate</a>.</li>
-    <li>Navegue até <strong>Máquinas → Máquinas</strong>.</li>
-    <li>Clique em <strong>+ Máquina</strong>, dê um nome e salve.</li>
-  </ol>
-</section>
-
-<section id="groups" class="mb-5">
-  <h2>4. Criar um Grupo de Máquinas</h2>
-  <p>Para balancear cargas entre vários agentes:</p>
-  <ol>
-    <li>No portal, acesse <strong>Máquinas → Grupos de máquinas</strong>.</li>
-    <li>Clique em <strong>+ Grupo de máquinas</strong> e adicione suas máquinas.</li>
-  </ol>
-  <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Grupos de máquinas" class="img-fluid rounded">
-</section>
-
-<section id="flows" class="mb-5">
-  <h2>5. Criar & Executar um Fluxo Desktop</h2>
-  <ol>
-    <li>No PAD ou portal, crie um novo fluxo desktop.</li>
-    <li>Arraste ações, salve e execute localmente.</li>
-  </ol>
-  <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="Lista de fluxos desktop" class="img-fluid rounded">
-</section>
-
-<section id="monitor" class="mb-5">
-  <h2>6. Monitorar Atividade</h2>
-  <ol>
-    <li>Abra o painel <strong>Atividade de fluxo desktop</strong> no portal.</li>
-    <li>Filtre por período, fluxo, máquina ou erros.</li>
-  </ol>
-  <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Painel de atividade" class="img-fluid rounded">
-</section>
-
-<section id="powerbi" class="mb-5">
-  <h2>7. Insights no Power BI</h2>
-  <p>Clique em <strong>Open in Power BI</strong> para relatórios avançados.</p>
-</section>
-
-<section id="video" class="mb-5">
-  <h2>8. Vídeo Tutorial</h2>
-  <div class="ratio ratio-16x9">
-    <video controls class="w-100 h-100 rounded">
-      <source src="tutorial.mp4" type="video/mp4">
-      Seu navegador não suporta a tag de vídeo.
-    </video>
   </div>
-</section>
 
-<section id="gallery" class="mb-5 gallery">
-  <h2>9. Galeria de Imagens</h2>
-  <div class="row g-3">
-    <div class="col-6 col-md-4"><img src="gallery1.png" alt="Passo 1" class="img-fluid rounded"></div>
-    <div class="col-6 col-md-4"><img src="gallery2.png" alt="Passo 2" class="img-fluid rounded"></div>
-    <div class="col-6 col-md-4"><img src="gallery3.png" alt="Passo 3" class="img-fluid rounded"></div>
+  <!-- Section Navigation Dots -->
+  <div class="section-dots d-none d-md-flex" id="sectionDots"></div>
+
+  <!-- Main Content -->
+  <main id="content">
+    <section id="home" class="mb-4">
+      <h1>Como Configurar o Power Automate Desktop e Monitorar Analytics</h1>
+      <p class="text-secondary mb-4">Automatize seus processos desktop e obtenha análises avançadas</p>
+      <div class="d-flex">
+        <button class="btn btn-tiktok me-2">
+          <i class="bi bi-lightning me-1"></i> Iniciar Tutorial
+        </button>
+        <button class="btn btn-outline-light">
+          <i class="bi bi-bookmark me-1"></i> Salvar
+        </button>
+      </div>
+    </section>
+
+    <section id="introduction" class="mb-4">
+      <h2>Introdução</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-stars"></i> O que é Power Automate Desktop?</h3>
+        <p>Power Automate Desktop traz automação de processos robóticos (RPA) low-code para Windows, permitindo automatizar tarefas repetitivas sem precisar de conhecimentos avançados de programação.</p>
+      </div>
+      
+      <div class="content-card">
+        <h3><i class="bi bi-check2-circle"></i> Neste tutorial, você aprenderá:</h3>
+        <ul>
+          <li>Instalar e conectar o agente PAD</li>
+          <li>Registrar sua máquina</li>
+          <li>Criar grupos de máquinas</li>
+          <li>Construir e executar fluxos desktop</li>
+          <li>Monitorar via painel de atividade</li>
+          <li>Usar Power BI para insights</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="prereq" class="mb-4">
+      <h2>Pré-requisitos</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-clipboard-check"></i> Antes de começar</h3>
+        <ul>
+          <li><strong>Conta Microsoft 365</strong> com licença Power Automate</li>
+          <li><strong>Permissão de administrador</strong> no Windows</li>
+          <li><strong>Acesso à internet</strong> ao portal Power Automate</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="install" class="mb-4">
+      <h2>1. Instalar Power Automate Desktop</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-download"></i> Instalação</h3>
+        <ol>
+          <li>Baixe o instalador em <a href="https://aka.ms/PADDownload" class="text-accent">aka.ms/PADDownload</a></li>
+          <li>Execute o MSI como administrador</li>
+          <li>Siga as instruções do assistente de instalação</li>
+          <li>Abra o PAD e faça login com sua conta Microsoft</li>
+        </ol>
+        <div class="text-center mt-3">
+          <button class="btn btn-tiktok">
+            <i class="bi bi-download me-1"></i> Baixar PAD
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="runtime" class="mb-4">
+      <h2>2. Configurar o Machine Runtime</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-plug"></i> Conectar o ambiente</h3>
+        <ol>
+          <li>No PAD, vá em <strong>Configurações → Machine runtime</strong></li>
+          <li>Baixe e instale o agente do runtime</li>
+          <li>Faça login com sua conta Microsoft</li>
+          <li>Selecione o ambiente desejado</li>
+        </ol>
+      </div>
+      <img src="834a12f6-c2ea-4641-9335-84af95a9b0ec.png" alt="Machine Runtime conectado" class="screenshot mt-3">
+    </section>
+
+    <section id="register" class="mb-4">
+      <h2>3. Registrar sua Máquina</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-hdd-network"></i> Processo de registro</h3>
+        <ol>
+          <li>Acesse o <a href="https://make.powerautomate.com" class="text-accent">portal do Power Automate</a></li>
+          <li>Navegue até <strong>Máquinas → Máquinas</strong></li>
+          <li>Clique em <strong>+ Máquina</strong>, dê um nome e salve</li>
+          <li>O agente do runtime será associado automaticamente</li>
+        </ol>
+        <div class="d-flex align-items-center mt-3 p-2 bg-dark rounded">
+          <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+          <small>Dica: Use nomes descritivos para identificar facilmente suas máquinas no painel</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="groups" class="mb-4">
+      <h2>4. Criar um Grupo de Máquinas</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-people"></i> Balanceamento de carga</h3>
+        <p>Grupos de máquinas permitem distribuir a execução de fluxos entre vários agentes, garantindo alta disponibilidade e performance:</p>
+        <ol>
+          <li>No portal, acesse <strong>Máquinas → Grupos de máquinas</strong></li>
+          <li>Clique em <strong>+ Grupo de máquinas</strong></li>
+          <li>Dê um nome ao grupo</li>
+          <li>Selecione as máquinas que farão parte do grupo</li>
+          <li>Salve as configurações</li>
+        </ol>
+      </div>
+      <img src="e55fc619-c840-48f5-9c7b-c298e8843772.png" alt="Grupos de máquinas" class="screenshot mt-3">
+      
+      <div class="swipe-up mt-4 text-center">
+        <div class="d-flex justify-content-center align-items-center">
+          <i class="bi bi-chevron-compact-up fs-4 text-accent me-2"></i>
+          <span class="text-white-50">Deslize para cima</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="flows" class="mb-4">
+      <h2>5. Criar & Executar um Fluxo Desktop</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-ui-checks"></i> Criação de fluxos</h3>
+        <p>Fluxos desktop são a base da automação no Power Automate Desktop:</p>
+        <ol>
+          <li>No PAD ou portal, crie um novo fluxo desktop</li>
+          <li>Use o designer de fluxo para arrastar e soltar ações</li>
+          <li>Configure cada ação conforme necessário</li>
+          <li>Salve o fluxo e execute-o localmente</li>
+          <li>Para executar em outras máquinas, use os grupos criados</li>
+        </ol>
+      </div>
+      
+      <div class="video-preview mt-4 position-relative">
+        <img src="a18205e2-04a8-4cad-aa13-528a9b253999.png" alt="Lista de fluxos desktop" class="screenshot">
+        <div class="play-button position-absolute top-50 start-50 translate-middle">
+          <button class="btn btn-tiktok rounded-circle">
+            <i class="bi bi-play-fill fs-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="monitor" class="mb-4">
+      <h2>6. Monitorar Atividade</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-bar-chart"></i> Painel de atividades</h3>
+        <p>Monitore a execução de seus fluxos e resolva problemas rapidamente:</p>
+        <ol>
+          <li>Abra o painel <strong>Atividade de fluxo desktop</strong> no portal</li>
+          <li>Visualize todas as execuções recentes de fluxos</li>
+          <li>Filtre por período, fluxo, máquina ou status</li>
+          <li>Analise erros e resolva problemas quando necessário</li>
+        </ol>
+      </div>
+      
+      <div class="stats-preview mt-4 row g-2">
+        <div class="col-6">
+          <div class="stat-card bg-dark p-3 rounded text-center">
+            <div class="display-4 text-success">98%</div>
+            <div class="text-white-50">Taxa de sucesso</div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="stat-card bg-dark p-3 rounded text-center">
+            <div class="display-4 text-info">2.5k</div>
+            <div class="text-white-50">Execuções/mês</div>
+          </div>
+        </div>
+      </div>
+      
+      <img src="3591da1f-050f-4415-9269-6cb369a001ee.png" alt="Painel de atividade" class="screenshot mt-3">
+    </section>
+
+    <section id="powerbi" class="mb-4">
+      <h2>7. Insights no Power BI</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-pie-chart"></i> Análise avançada</h3>
+        <p>Obtenha insights detalhados sobre suas automações:</p>
+        <ul>
+          <li>Clique em <strong>Open in Power BI</strong> no painel de atividades</li>
+          <li>Visualize relatórios pré-configurados ou crie os seus próprios</li>
+          <li>Analise tendências de desempenho ao longo do tempo</li>
+          <li>Identifique oportunidades de otimização</li>
+          <li>Compartilhe relatórios com sua equipe</li>
+        </ul>
+        <div class="text-center mt-3">
+          <button class="btn btn-tiktok">
+            <i class="bi bi-graph-up-arrow me-1"></i> Ver Relatórios
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="video" class="mb-4">
+      <h2>8. Vídeo Tutorial</h2>
+      <div class="video-container">
+        <div class="ratio ratio-16x9">
+          <video controls poster="video-thumbnail.jpg" class="w-100 h-100 rounded">
+            <source src="tutorial.mp4" type="video/mp4">
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+        </div>
+      </div>
+      
+      <div class="content-card mt-3">
+        <h3><i class="bi bi-collection-play"></i> Mais tutoriais</h3>
+        <div class="video-playlist row g-2">
+          <div class="col-4">
+            <div class="position-relative">
+              <img src="/api/placeholder/120/80" alt="Video thumbnail" class="img-fluid rounded">
+              <span class="position-absolute bottom-0 end-0 bg-dark px-1 rounded text-white small">3:45</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="position-relative">
+              <img src="/api/placeholder/120/80" alt="Video thumbnail" class="img-fluid rounded">
+              <span class="position-absolute bottom-0 end-0 bg-dark px-1 rounded text-white small">5:22</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="position-relative">
+              <img src="/api/placeholder/120/80" alt="Video thumbnail" class="img-fluid rounded">
+              <span class="position-absolute bottom-0 end-0 bg-dark px-1 rounded text-white small">2:18</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="mb-4">
+      <h2>9. Galeria de Imagens</h2>
+      <div class="gallery">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="image-container">
+              <img src="gallery1.png" alt="Passo 1" class="img-fluid">
+              <div class="image-overlay">
+                <i class="bi bi-1-circle"></i>
+                <span>Configuração inicial</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="image-container">
+              <img src="gallery2.png" alt="Passo 2" class="img-fluid">
+              <div class="image-overlay">
+                <i class="bi bi-2-circle"></i>
+                <span>Editor de fluxo</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="image-container">
+              <img src="gallery3.png" alt="Passo 3" class="img-fluid">
+              <div class="image-overlay">
+                <i class="bi bi-3-circle"></i>
+                <span>Execução do fluxo</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="image-container">
+              <img src="/api/placeholder/320/160" alt="Passo 4" class="img-fluid">
+              <div class="image-overlay">
+                <i class="bi bi-4-circle"></i>
+                <span>Análise de resultados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusion">
+      <h2>Conclusão</h2>
+      <div class="content-card">
+        <h3><i class="bi bi-check2-all"></i> O que aprendemos</h3>
+        <p>Agora você está pronto para implementar, escalar e monitorar seus fluxos com análise avançada!</p>
+        <p>Aproveite o poder da automação desktop para:</p>
+        <ul>
+          <li>Economizar tempo em tarefas repetitivas</li>
+          <li>Escalar automação em sua organização</li>
+          <li>Monitorar desempenho e otimizar processos</li>
+          <li>Obter insights valiosos com analytics avançados</li>
+        </ul>
+      </div>
+      
+      <div class="mt-4 text-center">
+        <button class="btn btn-tiktok">
+          <i class="bi bi-hand-thumbs-up me-1"></i> Curtir Tutorial
+        </button>
+        <button class="btn btn-outline-light ms-2">
+          <i class="bi bi-share me-1"></i> Compartilhar
+        </button>
+      </div>
+      
+      <div class="next-steps mt-4">
+        <h3 class="fs-5"><i class="bi bi-signpost-split me-2 text-accent"></i>Próximos passos</h3>
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="next-card p-3 bg-dark rounded text-center">
+              <i class="bi bi-trophy fs-3 text-warning"></i>
+              <div>Certificação PAD</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="next-card p-3 bg-dark rounded text-center">
+              <i class="bi bi-robot fs-3 text-info"></i>
+              <div>Automação avançada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="social-links">
+        <a href="#"><i class="bi bi-twitter-x"></i></a>
+        <a href="#"><i class="bi bi-instagram"></i></a>
+        <a href="#"><i class="bi bi-linkedin"></i></a>
+        <a href="#"><i class="bi bi-youtube"></i></a>
+        <a href="#"><i class="bi bi-tiktok"></i></a>
+      </div>
+      <p class="mb-2">&copy; 2025 Nova Courses. Todos os direitos reservados.</p>
+      <p class="mb-0">
+        <a href="#">Política de Privacidade</a> •
+        <a href="#">Termos de Uso</a> •
+        <a href="#">FAQ</a>
+      </p>
+    </footer>
+  </main>
+
+  <!-- Section Navigation Indicator -->
+  <div class="swipe-indicator" id="swipeIndicator">
+    <i class="bi bi-arrow-up-circle"></i>
+    <span>Deslize para navegar</span>
   </div>
-</section>
 
-<section id="conclusion" class="mb-5">
-  <h2>Conclusão</h2>
-  <p>Agora você está pronto para implementar, escalar e monitorar seus fluxos com análise avançada!</p>
-</section>
-
-<footer>
-  <div class="container text-center">
-    <p>&copy; 2025 Nova Courses. Todos os direitos reservados.</p>
-    <p>
-      <a href="#">Política de Privacidade</a> •
-      <a href="#">Termos de Uso</a>
-    </p>
-  </div>
-</footer>
-
-  </main>  <!-- Floating Chat Button & Window -->  <button id="chatBtn" class="btn btn-primary shadow-lg rounded-circle">
-    <i class="bi bi-chat-dots-fill" style="font-size:1.5rem;"></i>
+  <!-- Floating Chat Button & Window -->
+  <button id="chatBtn" class="btn shadow-lg">
+    <i class="bi bi-chat-dots-fill"></i>
   </button>
-  <div id="chatWindow" class="card shadow rounded" style="display:none; position:fixed; bottom:90px; right:20px; width:320px;">
-    <div class="card-header bg-primary text-white">Chat</div>
-    <div class="card-body p-2" style="height:250px; overflow-y:auto;"></div>
+  
+  <div id="chatWindow" class="card shadow rounded">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>Chat de Suporte</span>
+      <button class="close-chat" id="closeChat">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="card-body p-2"></div>
     <div class="card-footer p-2">
       <div class="input-group">
-        <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Digitar mensagem...">
-        <button class="btn btn-primary btn-sm" id="sendBtn">Enviar</button>
+        <input type="text" id="chatInput" class="form-control" placeholder="Digite sua dúvida...">
+        <button class="btn" id="sendBtn">Enviar</button>
       </div>
     </div>
-  </div>  <!-- Bootstrap JS & PWA Service Worker -->  <script
+  </div>
+
+  <!-- Bootstrap JS & PWA Service Worker -->
+  <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    
     crossorigin="anonymous"
-  ></script>  <script>
-    // ScrollSpy
-    new bootstrap.ScrollSpy(document.body, {
-      target: '#navMenu',
-      offset: 80
-    });
-    // Close offcanvas on link click
-    document.querySelectorAll('#navMenu .nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        const offcanvasEl = document.getElementById('sidebar');
-        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-        if (bsOffcanvas) bsOffcanvas.hide();
+  ></script>
+
+  <script>
+    // Progress bar
+    function updateProgressBar() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    }
+
+    // Update navbar on scroll
+    function handleScroll() {
+      updateProgressBar();
+      
+      // Add shadow and reduce padding on navbar when scrolled
+      const navbar = document.getElementById('mainNav');
+      if (window.scrollY > 10) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      
+      // Update section dots
+      const sections = document.querySelectorAll('section');
+      const dots = document.querySelectorAll('.section-dots .dot');
+      
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          dots.forEach(dot => dot.classList.remove('active'));
+          if (dots[index]) dots[index].classList.add('active');
+        }
       });
+    }
+
+    // Create section dots
+    function createSectionDots() {
+      const sections = document.querySelectorAll('section');
+      const dotsContainer = document.getElementById('sectionDots');
+      
+      sections.forEach((section, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        
+        // Add click event to navigate to section
+        dot.addEventListener('click', () => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    // Show swipe indicator
+    function showSwipeIndicator() {
+      const indicator = document.getElementById('swipeIndicator');
+      indicator.classList.add('show');
+      
+      setTimeout(() => {
+        indicator.classList.remove('show');
+      }, 2000);
+    }
+
+    // Initialize ScrollSpy
+    document.addEventListener('DOMContentLoaded', function() {
+      new bootstrap.ScrollSpy(document.body, {
+        target: '#navMenu',
+        offset: 80
+      });
+      
+      // Create section dots
+      createSectionDots();
+      
+      // Handle scroll events
+      window.addEventListener('scroll', handleScroll);
+      
+      // Initialize scroll position
+      handleScroll();
+      
+      // Close offcanvas on link click
+      document.querySelectorAll('#navMenu .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          const offcanvasEl = document.getElementById('sidebar');
+          const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+          if (bsOffcanvas) bsOffcanvas.hide();
+        });
+      });
+      
+      // Show swipe indicator after a short delay
+      setTimeout(showSwipeIndicator, 1500);
+      
+      // Chat toggle functions
+      document.getElementById('chatBtn').addEventListener('click', () => {
+        document.getElementById('chatWindow').style.display = 'block';
+      });
+      
+      document.getElementById('closeChat').addEventListener('click', () => {
+        document.getElementById('chatWindow').style.display = 'none';
+      });
+      
+      document.getElementById('sendBtn').addEventListener('click', () => {
+        sendChatMessage();
+      });
+      
+      document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendChatMessage();
+        }
+      });
+      
+      function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        const chatBody = document.querySelector('#chatWindow .card-body');
+        
+        // User message
+        const userMsg = document.createElement('p');
+        userMsg.textContent = message;
+        userMsg.classList.add('user-message');
+        chatBody.appendChild(userMsg);
+        
+        // Bot response (simulated)
+        setTimeout(() => {
+          const botMsg = document.createElement('p');
+          botMsg.textContent = "Obrigado por sua mensagem! Um especialista responderá em breve.";
+          botMsg.classList.add('bot-message');
+          chatBody.appendChild(botMsg);
+          
+          // Scroll to bottom
+          chatBody.scrollTop = chatBody.scrollHeight;
+        }, 800);
+        
+        input.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+      
+      // Add touch swipe navigation on mobile
+      let touchStartY = 0;
+      let touchEndY = 0;
+      
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+      });
+      
+      document.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+      });
+      
+      function handleSwipe() {
+        const sections = document.querySelectorAll('section');
+        const currentSection = [...sections].find(section => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        });
+        
+        if (!currentSection) return;
+        
+        const currentIndex = [...sections].indexOf(currentSection);
+        
+        if (touchEndY < touchStartY - 70) {
+          // Swipe up - go to next section
+          if (currentIndex < sections.length - 1) {
+            sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            showSwipeIndicator();
+          }
+        } else if (touchEndY > touchStartY + 70) {
+          // Swipe down - go to previous section
+          if (currentIndex > 0) {
+            sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            showSwipeIndicator();
+          }
+        }
+      }
     });
-    // Chat toggle
-    document.getElementById('chatBtn').addEventListener('click', () => {
-      const w = document.getElementById('chatWindow');
-      w.style.display = w.style.display === 'block' ? 'none' : 'block';
-    });
-    document.getElementById('sendBtn').addEventListener('click', () => {
-      const input = document.getElementById('chatInput');
-      if (!input.value) return;
-      const p = document.createElement('p'); p.textContent = input.value; p.classList.add('mb-1');
-      document.querySelector('#chatWindow .card-body').appendChild(p);
-      input.value = '';
-      document.querySelector('#chatWindow .card-body').scrollTop = document.querySelector('#chatWindow .card-body').scrollHeight;
-    });
-    // Register service worker
+
+    // Register service worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js').catch(console.error);
     }
-  </script></body>
+  </script>
+</body>
 </html>
